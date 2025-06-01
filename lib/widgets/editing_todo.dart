@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/bloc/todo_state_menagment_bloc.dart';
+import 'package:todo/models/todo_model.dart';
 
-class AddNewTodo extends StatefulWidget {
-  AddNewTodo({super.key});
+class EditingTodo extends StatefulWidget {
+  const EditingTodo({super.key,required this.item, required this.todoModelKey});
+  final int todoModelKey;
+  final TodoModel item;
 
   @override
-  State<AddNewTodo> createState() => _AddNewTodoState();
+  State<EditingTodo> createState() => _EditingTodoState();
 }
 
-class _AddNewTodoState extends State<AddNewTodo> {
-  TextEditingController titleTextEditingController = TextEditingController();
+class _EditingTodoState extends State<EditingTodo> {
+  final TextEditingController titleTextEditingController = TextEditingController();
 
-  TextEditingController contentTextEditingController = TextEditingController();
-@override
+  final TextEditingController contentTextEditingController = TextEditingController();
+  @override
   void dispose() {
     super.dispose();
     titleTextEditingController.dispose();
@@ -21,6 +24,8 @@ class _AddNewTodoState extends State<AddNewTodo> {
   }
   @override
   Widget build(BuildContext context) {
+    titleTextEditingController.text = widget.item.title;
+    contentTextEditingController.text = widget.item.content;
     return SizedBox(
       width: 200,
       height: 300,
@@ -29,7 +34,7 @@ class _AddNewTodoState extends State<AddNewTodo> {
         children: [
           Center(
             child: Text(
-              " New Task ",
+              " Editing Task ",
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
           ),
@@ -93,12 +98,13 @@ class _AddNewTodoState extends State<AddNewTodo> {
                     String content =
                         contentTextEditingController.text.toString();
                     context.read<TodoStateMenagmentBloc>().add(
-                      AddDataEvent(title: title, content: content),
+                      EditeEvent(content: content, title:  title, item: widget.item,todoModelKey: widget.todoModelKey),
                     );
 
                     Navigator.pop(context);
                   }
                 },
+
                 child: Text(
                   "Save",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

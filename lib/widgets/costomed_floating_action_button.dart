@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:todo_new/widgets/add_new_todo.dart';
+import 'package:todo/widgets/add_new_todo.dart';
 
 class CostomedFloatingActionButton extends StatelessWidget{
   const CostomedFloatingActionButton({super.key});
