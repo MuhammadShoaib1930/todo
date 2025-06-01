@@ -1,9 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo/bloc/todo_state_menagment_bloc.dart';
+import 'package:todo/hive_servers/todo_servers.dart';
 import 'package:todo/models/todo_model.dart';
 import 'package:todo/widgets/costomed_detailed.dart';
+import 'package:todo/widgets/editing_todo.dart';
 
 class DeletedScreen extends StatefulWidget {
   const DeletedScreen({super.key});
@@ -15,9 +17,9 @@ class DeletedScreen extends StatefulWidget {
 class _DeletedScreenState extends State<DeletedScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoStateMenagmentBloc , TodoState>(
-      builder: (context, state) {
-    List<TodoModel> data = state.data.where((item) => item.deleted,).toList();
+    return ValueListenableBuilder(valueListenable: TodoServers().box().listenable(),
+      builder: (context,allData, state) {
+        List<TodoModel> data=allData.values.where((item) => item.deleted ,).toList();
         return ListView.separated(
           itemBuilder: (context, index) {
             return Padding(
@@ -27,7 +29,8 @@ class _DeletedScreenState extends State<DeletedScreen> {
                   children: [
                     Expanded(
                       flex: 10,
-                      child: Text(data[index].title,
+                      child: Text(
+                        data[index].title,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -37,28 +40,52 @@ class _DeletedScreenState extends State<DeletedScreen> {
                     Expanded(
                       flex: 2,
                       child: IconButton(
-                        icon:
-                            (data[index].completed)
-                                ? Icon(Icons.check, color: Colors.blue)
-                                : Icon(Icons.check),
-
-                        onPressed: () {},
+                        icon: Icon(Icons.check),
+                        onPressed: () async {
+                        
+                          
+                          context.read<TodoStateMenagmentBloc>().add(
+                          CompletedEvent(item: data[index],todoModelKey: data[index].key),
+                          );
+                        },
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: IconButton(
-                        icon:
-                            (data[index].favorite)
-                                ? Icon(
-                                  Icons.favorite_rounded,
-                                  color: Colors.blue,
-                                )
-                                : Icon(Icons.favorite_border),
-                        onPressed: () {},
+                        icon: Icon(Icons.favorite_border),
+                        onPressed: () {
+                          context.read<TodoStateMenagmentBloc>().add(
+                            FavoriteEvent(
+                              item: data[index],
+                              todoModelKey: data[index].key,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    // Expanded(flex: 2, child: IconButton(icon: Icon(Icons.edit),onPressed: () {},)),
+                    Expanded(
+                      flex: 2,
+                      child: IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: EditingTodo(
+                                  item: data[index],
+                                  todoModelKey: data[index].key,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                     Expanded(
                       flex: 2,
                       child: IconButton(
@@ -81,16 +108,17 @@ class _DeletedScreenState extends State<DeletedScreen> {
                     Expanded(
                       flex: 2,
                       child: IconButton(
-                        icon: Icon(Icons.delete, color: Colors.blue),
-                        onPressed: () {},
+                        icon: Icon(Icons.delete_outline),
+                        onPressed: () {
+                          context.read<TodoStateMenagmentBloc>().add(
+                            DeletedPermenantEvent( todoModelKey: data[index].key)
+                          );
+                        },
                       ),
                     ),
                   ],
                 ),
-                children: [
-                  Text(data[index].content,
-                  ),
-                ],
+                children: [Text(data[index].content)],
               ),
             );
           },

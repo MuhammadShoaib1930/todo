@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo/bloc/todo_state_menagment_bloc.dart';
 import 'package:todo/hive_servers/todo_servers.dart';
 import 'package:todo/models/todo_model.dart';
@@ -16,14 +17,9 @@ class PandingScreen extends StatefulWidget {
 class _PandingScreenState extends State<PandingScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoStateMenagmentBloc, TodoState>(
-      builder: (context, state) {
-        List<TodoModel> data =
-            state.data
-                .where(
-                  (item) => !item.completed && !item.favorite && !item.deleted,
-                )
-                .toList();
+    return ValueListenableBuilder(valueListenable: TodoServers().box().listenable(),
+      builder: (context,allData, state) {
+        List<TodoModel> data=allData.values.where((item) => !item.completed && !item.favorite && !item.deleted ,).toList();
         return ListView.separated(
           itemBuilder: (context, index) {
             return Padding(

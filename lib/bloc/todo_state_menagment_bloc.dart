@@ -18,6 +18,7 @@ class TodoStateMenagmentBloc extends Bloc<TodoBaseEvent, TodoState> {
     on<FavoriteEvent>(_favoriteEvent);
     on<EditeEvent>(_editeEvent);
     on<DeletedEvent>(_deletedEvent);
+    on<DeletedPermenantEvent>(_deletedPermenantEvent);
   }
 
   FutureOr<void> _changeScreenEvent(
@@ -102,4 +103,9 @@ class TodoStateMenagmentBloc extends Bloc<TodoBaseEvent, TodoState> {
     ));
   }
 
+
+  FutureOr<void> _deletedPermenantEvent(DeletedPermenantEvent event, Emitter<TodoState> emit) {
+    TodoServers().deleteTodo(event.todoModelKey);
+    emit(TodoState(currentIndex: state.currentIndex,data: TodoServers().getAllTodos()));
+  }
 }

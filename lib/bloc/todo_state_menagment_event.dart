@@ -46,3 +46,9 @@ class DeletedEvent extends TodoBaseEvent{
   @override
   List<Object?> get props => [item,todoModelKey]; 
 }
+class DeletedPermenantEvent extends TodoBaseEvent{
+  final int todoModelKey;
+  DeletedPermenantEvent({required this.todoModelKey});
+  @override
+  List<Object?> get props => [todoModelKey]; 
+}

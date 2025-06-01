@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import '../models/todo_model.dart'; // Adjust the path if needed
 
 class TodoServers {
+  static final fileName = "myDataBase";
   // Singleton instance
   static final TodoServers _instance = TodoServers._internal();
 
@@ -19,8 +20,9 @@ class TodoServers {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(TodoModelAdapter()); // Register the adapter if not yet
     }
-    _todoBox = await Hive.openBox<TodoModel>('todoBox');
+    _todoBox = await Hive.openBox<TodoModel>(fileName);
   }
+  Box<TodoModel> box()=>_todoBox;
 
   /// Get all todos
   List<TodoModel> getAllTodos() {
@@ -40,7 +42,7 @@ class TodoServers {
 
   /// Delete a todo by key
   Future<void> deleteTodo(int key) async {
-    await _todoBox.delete(key);
+    await _todoBox.deleteAt(key);
   }
 
 }
