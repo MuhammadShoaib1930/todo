@@ -1,4 +1,3 @@
-
 import 'package:todo/app_constant/app_constant.dart';
 import 'package:todo/bloc/app_drawer_bloc.dart';
 import 'package:todo/import_packages/ui_packages.dart';
@@ -27,10 +26,14 @@ class _CostomedDrawerState extends State<CostomedDrawer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          SizedBox(width: 50),
+          SizedBox(
+            width: 200,
+            child: DrawerHeader(child:CircleAvatar(backgroundImage: AssetImage(AppConstant.appImagePath),))),
+         
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              
               Text("Dark", style: titleStyle),
               BlocBuilder<AppDrawerBloc, AppDrawerState>(
                 builder: (context, state) {
@@ -47,19 +50,6 @@ class _CostomedDrawerState extends State<CostomedDrawer> {
             ],
           ),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text("Save", style: titleStyle),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text("Cancel", style: titleStyle),
-              ),
-            ],
-          ),
           Column(
             children: [
               Text("Clear all Data of: ", style: titleStyle),
@@ -99,27 +89,69 @@ class _CostomedDrawerState extends State<CostomedDrawer> {
               ),
             ],
           ),
-          TextButton(onPressed: () {
-            TodoServers().deleteAllData();
-            context.read<AppDrawerBloc>().add(ThemeChnagerEvent(isDark: false));
-          }, child: Text("Reset", style: titleStyle)),
           TextButton(
             onPressed: () {
-              showAboutDialog(
-                
+              TodoServers().deleteAllData();
+              context.read<AppDrawerBloc>().add(
+                ThemeChnagerEvent(isDark: false),
+              );
+            },
+            child: Text("Reset", style: titleStyle),
+          ),
+          TextButton(
+            onPressed: () {
+              showDialog(
                 context: context,
-                applicationName: "Todo",
-                applicationVersion: "1.0",
-                barrierColor: Colors.blueGrey,
-                barrierLabel: "barrierLabel",
-                applicationIcon: Icon(Icons.today_outlined),
-                children: 
-              [
-                Center(child: SelectableText("Developed by ${AppConstant.developerName}",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),)),
-                Center(child: SelectableText(AppConstant.developerContent,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-                Center(child: SelectableText(AppConstant.developerGmail,style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
-
-              ]);
+                builder:
+                    (context) => AlertDialog(
+                      title: Row(
+                        children: [
+                          Image.asset(
+                            AppConstant.appImagePath,
+                            width: 24,
+                            height: 24,
+                          ),
+          
+                          SizedBox(width: 8),
+                          Text("Todo v1.0"),
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SelectableText(
+                            "Developed by ${AppConstant.developerName}",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          SelectableText(
+                            AppConstant.developerContent,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          SelectableText(
+                            AppConstant.developerGmail,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text("CANCEL"),
+                        ),
+                      ],
+                    ),
+              );
             },
             child: Text("About App", style: titleStyle),
           ),

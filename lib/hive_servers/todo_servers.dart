@@ -1,7 +1,7 @@
+import 'package:todo/app_constant/app_constant.dart';
 import 'package:todo/import_packages/ui_packages.dart';
 
 class TodoServers {
-  static final fileName = "myDataBase";
   // Singleton instance
   static final TodoServers _instance = TodoServers._internal();
 
@@ -19,7 +19,7 @@ class TodoServers {
     if (!Hive.isAdapterRegistered(0)) {
       Hive.registerAdapter(TodoModelAdapter()); // Register the adapter if not yet
     }
-    _todoBox = await Hive.openBox<TodoModel>(fileName);
+    _todoBox = await Hive.openBox<TodoModel>(AppConstant.accountDatabaseName);
   }
   Box<TodoModel> box()=>_todoBox;
 
