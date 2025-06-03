@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:todo/app_constant/app_settings.dart';
 import 'package:todo/models/todo_model.dart';
 
 class CostomedDetailed extends StatefulWidget {
@@ -12,8 +13,8 @@ class CostomedDetailed extends StatefulWidget {
 
 class _CostomedDetailedState extends State<CostomedDetailed> {
 
-  final TextStyle styleTitle = TextStyle(fontSize: 20,fontWeight: FontWeight.bold);
-  final TextStyle styleContent = TextStyle(fontSize: 18);
+  final TextStyle styleTitle = TextStyle(fontSize: AppSettings.titleFont,fontWeight: AppSettings.titlesBold);
+  final TextStyle styleContent = TextStyle(fontSize: AppSettings.contentFont,fontWeight: AppSettings.contentBold);
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,4 @@
-import 'package:hive/hive.dart';
-import '../models/todo_model.dart'; // Adjust the path if needed
+import 'package:todo/import_packages/ui_packages.dart';
 
 class TodoServers {
   static final fileName = "myDataBase";
@@ -42,7 +41,33 @@ class TodoServers {
 
   /// Delete a todo by key
   Future<void> deleteTodo(int key) async {
-    await _todoBox.deleteAt(key);
+    await _todoBox.delete(key);
+  }
+  Future<void> deleteAllPadding()async{
+     List<TodoModel> data = _todoBox.values.where((item) => !item.completed && !item.favorite && !item.deleted).toList();
+    await _deletedList(data);
+  }
+  Future<void> deleteAllComplete()async{
+ List<TodoModel> data = _todoBox.values.where((item) => item.completed).toList();
+    await _deletedList(data);
+  }
+  Future<void> deleteAllFavorate()async{
+     List<TodoModel> data = _todoBox.values.where((item) => item.favorite).toList();
+    await _deletedList(data);
+
+  }
+  Future<void> _deletedList(List<TodoModel> data)async{
+    for (TodoModel item in data) {
+      await _todoBox.delete(item.key);
+    }
   }
 
+
+  Future<void> deleteAllDeleted()async{
+    List<TodoModel> data = _todoBox.values.where((item) => item.deleted).toList();
+    await _deletedList(data);
+  }
+  Future<void> deleteAllData()async{
+    await _todoBox.clear();
+  }
 }

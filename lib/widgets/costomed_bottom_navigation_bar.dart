@@ -22,9 +22,10 @@ class _CostomedBottomNavigationBarState
             currentIndex: state.currentIndex,
             selectedItemColor: Colors.blue,
             unselectedItemColor: Colors.grey,
+            
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.mark_unread_chat_alt),
+                icon: Icon(Icons.mark_unread_chat_alt,),
                 label: "Pandding",
               ),
               BottomNavigationBarItem(

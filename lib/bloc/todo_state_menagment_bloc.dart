@@ -1,10 +1,4 @@
-import 'dart:async';
-
-import 'package:equatable/equatable.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/hive_servers/todo_servers.dart';
-import 'package:todo/models/todo_model.dart';
+import 'package:todo/import_packages/bloc_packages.dart';
 import 'package:intl/intl.dart';
 part 'todo_state_menagment_event.dart';
 part 'todo_state_menagment_state.dart';
@@ -29,6 +23,7 @@ class TodoStateMenagmentBloc extends Bloc<TodoBaseEvent, TodoState> {
   }
 
   FutureOr<void> _addDataEvent(AddDataEvent event, Emitter<TodoState> emit) async{
+
     DateTime dateTime = DateTime.now();
     String date = DateFormat('dd : MM : yyyy').format(dateTime);
     String time = DateFormat('HH : mm : ss').format(dateTime);
@@ -42,7 +37,7 @@ class TodoStateMenagmentBloc extends Bloc<TodoBaseEvent, TodoState> {
       completed: false,
       edited: 0,
     );
-    await TodoServers().addTodo(item).then((value) =>     emit(
+    await TodoServers().addTodo(item).then((value) =>emit(
       TodoState(
         currentIndex: state.currentIndex,
         data: TodoServers().getAllTodos(),

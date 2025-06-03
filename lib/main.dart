@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/bloc/app_drawer_bloc.dart';
 import 'package:todo/bloc/todo_state_menagment_bloc.dart';
 import 'package:todo/hive_servers/todo_servers.dart';
 import 'package:todo/ui/home_screen.dart';
@@ -19,13 +20,16 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => TodoStateMenagmentBloc()),
+        BlocProvider(create: (context) => AppDrawerBloc()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        ),
-        home: HomeScreen(),
+      child: BlocBuilder<AppDrawerBloc, AppDrawerState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: state.themeData,
+            home: HomeScreen(),
+          );
+        },
       ),
     );
   }

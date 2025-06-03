@@ -1,12 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/bloc/todo_state_menagment_bloc.dart';
-import 'package:todo/ui/completed_screen.dart';
-import 'package:todo/ui/deleted_screen.dart';
-import 'package:todo/ui/favorite_screen.dart';
-import 'package:todo/ui/panding_screen.dart';
-import 'package:todo/widgets/costomed_bottom_navigation_bar.dart';
-import 'package:todo/widgets/costomed_floating_action_button.dart';
+
+import 'package:todo/app_constant/app_constant.dart';
+import 'package:todo/import_packages/ui_packages.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: BlocBuilder<TodoStateMenagmentBloc , TodoState>(
           builder: (context, state) {
-              return Text(title[state.currentIndex]);
+              return Text(title[state.currentIndex],style: AppConstant.textStyleTitle,);
           },
         ),
         centerTitle: true,
@@ -44,9 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocBuilder<TodoStateMenagmentBloc, TodoState>(
         builder: (context, state) {
             return screens[state.currentIndex];
-          
-        },
-      ),
+        },),
+        drawer:CostomedDrawer(),
+
     );
   }
 }
